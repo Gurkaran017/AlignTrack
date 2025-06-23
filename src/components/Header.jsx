@@ -7,7 +7,7 @@ const TopBar = ({ isMonitoring, sessionTime, cameraPosition, onBack, onToggleCam
     <View style={styles.container}>
       {/* Back Button */}
       <TouchableOpacity style={styles.button} onPress={onBack}>
-        <Ionicons name="arrow-back" size={18} color="#fff" />
+        <Ionicons name="arrow-back" size={18} color="#0c0c0c" />
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
 
@@ -21,7 +21,7 @@ const TopBar = ({ isMonitoring, sessionTime, cameraPosition, onBack, onToggleCam
 
       {/* Camera Switch */}
       <TouchableOpacity style={styles.button} onPress={onToggleCamera}>
-        <Ionicons name="camera-reverse" size={18} color="#fff" />
+        <Ionicons name="camera-reverse" size={18} color="#030303" />
         <Text style={styles.buttonText}>Flip</Text>
       </TouchableOpacity>
     </View>
@@ -33,11 +33,11 @@ export default TopBar;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#10B981', // stylish emerald green
+    backgroundColor: '#bebfc2', // Match splash screen blue
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderRadius: 30,
     marginHorizontal: 12,
     marginTop: 10,
@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)', // lighter contrast on dark blue
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 25,
   },
   buttonText: {
-    color: '#fff',
+    color: '#070606',
     fontSize: 15,
     fontWeight: '500',
     marginLeft: 6,
@@ -65,18 +65,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     paddingHorizontal: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'rgba(87, 84, 84, 0.08)',
     borderRadius: 20,
   },
   sessionLabel: {
     fontSize: 12,
-    color: '#E0F2F1',
+    color: '#070707',
     fontWeight: '500',
     marginBottom: 2,
   },
   sessionTime: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#060505',
   },
 });
+

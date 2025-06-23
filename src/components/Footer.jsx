@@ -7,7 +7,7 @@ const BottomControls = ({ isMonitoring, alertsCount, postureStatus, onStartStop 
         onPress={onStartStop}
         style={[
           styles.actionButton,
-          { backgroundColor: isMonitoring ? "#F87171" : "#34D399" },
+          { backgroundColor: isMonitoring ? "#F87171" : "#b3b5b8" },
         ]}
         activeOpacity={0.9}
       >
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: "#0b0a0a",
     fontSize: 17,
     fontWeight: "600",
     letterSpacing: 0.4,
