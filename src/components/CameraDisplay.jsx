@@ -17,6 +17,9 @@ const CameraOverlay = ({
   onToggleCamera,
   onToggleControls,
   onStartStop,
+  selectedAsana,
+  onChangeAsana,
+  yogaMode
 }) => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideTopAnim = useRef(new Animated.Value(0)).current;
@@ -107,6 +110,10 @@ const CameraOverlay = ({
             alertsCount={alertsCount}
             postureStatus={postureData?.posture || 'unknown'}
             onStartStop={onStartStop}
+            selectedAsana={selectedAsana}
+            onChangeAsana={onChangeAsana}
+            yogaMode={yogaMode}
+            
           />
         )}
       </Animated.View>

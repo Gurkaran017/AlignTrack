@@ -15,7 +15,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const HowItWorksScreen = ({ navigation }) => {
   const handleStartMonitoring = () => {
-    navigation.navigate('PostureMonitoring');
+    navigation.navigate('PostureMonitoring', { setYoga: false });
   };
 
   return (

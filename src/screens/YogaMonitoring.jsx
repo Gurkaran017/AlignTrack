@@ -23,9 +23,6 @@ import CameraOverlay from '../components/CameraDisplay';
 import LoadingScreen from '../components/Loader';
 import {usePostureMonitoring} from '../hooks/SessionAlert';
 import CameraView from '../components/CameraView';
-import { Modal, Pressable,TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-
 
 const PostureMonitoringScreen = ({ navigation, route }) => {
   // State and refs
@@ -55,20 +52,14 @@ const PostureMonitoringScreen = ({ navigation, route }) => {
   const [cameraPosition, setCameraPosition] = useState('front');
   const [showControls, setShowControls] = useState(true);
   const [postureData, setPostureData] = useState(null);
-  const [showAsanaModal, setShowAsanaModal] = useState(false);
-const [selectedAsana, setSelectedAsana] = useState('Tadasana');
-
   const isYoga = route?.params?.setYoga ?? false;
+
+  useEffect(() => {
+    console.log('Yoga Mode?', isYoga); // true or false
+  }, [isYoga]);
   
-    useEffect(() => {
-      console.log('Yoga Mode?', isYoga); // true or false
-      if (isYoga === true) {
-    setShowAsanaModal(true); // ✅ use setter to update state
-  }
-    }, [isYoga]);
-    
-    // You can also set it to a state if needed:
-    const [yogaMode, setYogaMode] = useState(isYoga);
+  // You can also set it to a state if needed:
+  const [yogaMode, setYogaMode] = useState(isYoga);
 
   // Posture monitoring
   const {
@@ -200,49 +191,6 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      {showAsanaModal && (
-  <Modal
-    animationType="fade"
-    transparent={true}
-    visible={showAsanaModal}
-    onRequestClose={() => setShowAsanaModal(false)}
-  >
-    <View style={styles.modalOverlay}>
-      <View style={styles.modalContainer}>
-        <Text style={styles.modalTitle}>Choose Yoga Asana</Text>
-        {['Tadasana', 'Vrikshasana', 'Utkatasana', 'Virabhadrasana'].map(
-          asana => (
-            <TouchableOpacity
-              key={asana}
-              style={[
-                styles.asanaOption,
-                selectedAsana === asana && styles.selectedOption,
-              ]}
-              onPress={() => setSelectedAsana(asana)}
-            >
-              <Text
-                style={[
-                  styles.asanaText,
-                  selectedAsana === asana && styles.selectedText,
-                ]}
-              >
-                {asana}
-              </Text>
-            </TouchableOpacity>
-          ),
-        )}
-
-        <TouchableOpacity
-          style={styles.okButton}
-          onPress={() => setShowAsanaModal(false)}
-        >
-          <Text style={styles.okButtonText}>OK</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  </Modal>
-)}
-
 
       <CameraView
         ref={cameraRef}
@@ -284,11 +232,6 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
         }
         onToggleControls={() => setShowControls(s => !s)}
         onStartStop={handleStartStop}
-        selectedAsana={selectedAsana}
-onChangeAsana={() => setShowAsanaModal(true)}
-yogaMode={yogaMode}
-
-
       />
     </SafeAreaView>
   );
@@ -312,58 +255,6 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
-  modalOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0,0,0,0.5)',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-modalContainer: {
-  backgroundColor: '#fff',
-  padding: 24,
-  borderRadius: 16,
-  width: '80%',
-  alignItems: 'center',
-},
-modalTitle: {
-  fontSize: 20,
-  fontWeight: 'bold',
-  marginBottom: 16,
-  color: '#1F2937',
-},
-asanaOption: {
-  paddingVertical: 12,
-  paddingHorizontal: 20,
-  marginVertical: 6,
-  borderRadius: 8,
-  backgroundColor: '#F3F4F6',
-  width: '100%',
-  alignItems: 'center',
-},
-selectedOption: {
-  backgroundColor: '#A78BFA',
-},
-asanaText: {
-  fontSize: 16,
-  color: '#1F2937',
-},
-selectedText: {
-  color: '#fff',
-  fontWeight: 'bold',
-},
-okButton: {
-  marginTop: 20,
-  backgroundColor: '#10B981',
-  paddingHorizontal: 24,
-  paddingVertical: 10,
-  borderRadius: 30,
-},
-okButtonText: {
-  color: '#fff',
-  fontWeight: '600',
-  fontSize: 16,
-},
-
 });
 
 export default PostureMonitoringScreen;

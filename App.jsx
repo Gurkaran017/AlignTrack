@@ -14,6 +14,7 @@ const Tab = createBottomTabNavigator();
 const PostureHome = require('./src/screens/pages/Homepage').default;
 const YogaHome = require('./src/screens/pages/YogaHomepage').default;
 const PostureMonitoring = require('./src/screens/MonitoringScreen').default;
+const YogaMonitoring = require('./src/screens/YogaMonitoring').default;
 
 // Tab Navigator Component
 const BottomTabs = () => (
@@ -84,6 +85,11 @@ const App = () => {
         <Stack.Screen
           name="PostureMonitoring"
           component={PostureMonitoring}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="YogaMonitoring"
+          component={YogaMonitoring}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
