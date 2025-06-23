@@ -1,14 +1,52 @@
-import React, {useState, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {StyleSheet, ActivityIndicator, View} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import WelcomeScreen from './src/screens/pages/Splash';
-import {storage} from './storage'; 
+import { storage } from './storage';
+import Icon from 'react-native-vector-icons/Ionicons'; // optional for icons
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+// Screens
+const PostureHome = require('./src/screens/pages/Homepage').default;
+const YogaHome = require('./src/screens/pages/YogaHomepage').default;
+const PostureMonitoring = require('./src/screens/MonitoringScreen').default;
+
+// Tab Navigator Component
+const BottomTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarActiveTintColor: '#14B8A6',
+      tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
+    }}
+  >
+    <Tab.Screen
+      name="Posture Detection"
+      component={PostureHome}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="body-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Yoga Posture Detection"
+      component={YogaHome}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="fitness-outline" color={color} size={size} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
 const App = () => {
-  const [firstTimeUser, setFirstTimeUser] = useState(null); 
+  const [firstTimeUser, setFirstTimeUser] = useState(null);
 
   useEffect(() => {
     const storedValue = storage.getString('firstTimeUser');
@@ -22,7 +60,7 @@ const App = () => {
 
   if (firstTimeUser === null) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -30,29 +68,23 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator initialRouteName={firstTimeUser ? 'Welcome' : 'PostureMonitoring'}> */}
-      <Stack.Navigator initialRouteName='Welcome'>
+      <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen
           name="Welcome"
           children={(props) => (
             <WelcomeScreen {...props} onComplete={onCompleteOnboarding} />
           )}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
-          name="CameraPermission"
-          component={require('./src/screens/pages/CameraPermissionScreen').default}
-          options={{headerShown: false}}
-        /> */}
         <Stack.Screen
-          name="HowItWorks"
-          component={require('./src/screens/pages/Homepage').default}
-          options={{headerShown: false}}
+          name="MainTabs"
+          component={BottomTabs}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="PostureMonitoring"
-          component={require('./src/screens/MonitoringScreen').default}
-          options={{headerShown: false}}
+          component={PostureMonitoring}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

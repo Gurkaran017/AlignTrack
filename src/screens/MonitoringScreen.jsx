@@ -217,7 +217,7 @@ const PostureMonitoringScreen = ({navigation}) => {
         alertsCount={alertsCount}
         cameraPosition={cameraPosition}
         // onBack={() => navigation.goBack()}
-        onBack={() => navigation.navigate("HowItWorks")}
+        onBack={() => navigation.navigate("MainTabs")}
 
         onToggleCamera={() =>
           setCameraPosition(p => (p === 'front' ? 'back' : 'front'))

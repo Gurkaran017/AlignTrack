@@ -14,11 +14,12 @@ const { width, height } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.replace('HowItWorks');
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
+  const timer = setTimeout(() => {
+    navigation.replace('MainTabs');
+  }, 3000);
+  return () => clearTimeout(timer);
+}, []);
+
 
   return (
     <SafeAreaView style={styles.container}>
