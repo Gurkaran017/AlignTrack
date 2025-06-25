@@ -14,12 +14,15 @@ export const getPostureColor = (status) => {
 export const getPostureMessage = (status) => {
   switch (status) {
     case "good":
-      return "Great posture!"
+      return "Great posture!";
     case "warning":
-      return "Slight slouching"
+      return "Slight slouching";
     case "poor":
-      return "Poor posture - adjust!"
+      return "Poor posture - adjust!";
+    case "unknown":
+      return "Position yourself";
     default:
-      return "Position yourself"
+      return status;
   }
-}
+};
+

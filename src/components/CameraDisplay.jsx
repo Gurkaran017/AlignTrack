@@ -19,7 +19,8 @@ const CameraOverlay = ({
   onStartStop,
   selectedAsana,
   onChangeAsana,
-  yogaMode
+  yogaMode,
+  yogaData,
 }) => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideTopAnim = useRef(new Animated.Value(0)).current;
@@ -82,12 +83,14 @@ const CameraOverlay = ({
       </Animated.View>
 
       <TouchableOpacity style={styles.centerArea} activeOpacity={1} onPress={onToggleControls}>
-        {isMonitoring && postureData && (
+        {isMonitoring && (postureData || yogaData )&& (
           <Animated.View style={[styles.indicatorContainer, { transform: [{ scale: pulseAnim }] }]}>
             <PostureIndicator
-              postureScore={postureData.score}
-              postureStatus={postureData.posture}
-              reason={postureData.reason}
+              postureScore={postureData?.score}
+              postureStatus={postureData?.posture}
+              reason={postureData?.reason}
+              yogaFeedback={yogaData.feedback}
+              yogaMode={yogaMode}
             />
           </Animated.View>
         )}

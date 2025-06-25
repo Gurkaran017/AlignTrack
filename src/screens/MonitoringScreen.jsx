@@ -21,10 +21,11 @@ import WebView from 'react-native-webview';
 import RNFS from 'react-native-fs';
 import CameraOverlay from '../components/CameraDisplay';
 import LoadingScreen from '../components/Loader';
-import {usePostureMonitoring} from '../hooks/SessionAlert';
+import {usePostureMonitoring} from '../hooks/PostureData';
 import CameraView from '../components/CameraView';
 import { Modal, Pressable,TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { YogaData } from '../hooks/YogaData';
 
 
 const PostureMonitoringScreen = ({ navigation, route }) => {
@@ -53,10 +54,13 @@ const PostureMonitoringScreen = ({ navigation, route }) => {
   const [chosenCameraDevice, setChosenCameraDevice] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [cameraPosition, setCameraPosition] = useState('front');
-  const [showControls, setShowControls] = useState(true);
+  const [showControls, setShowControls] = useState(true);  
   const [postureData, setPostureData] = useState(null);
   const [showAsanaModal, setShowAsanaModal] = useState(false);
-const [selectedAsana, setSelectedAsana] = useState('Tadasana');
+
+  const [selectedAsana, setSelectedAsana] = useState('Tadasana');
+  const [yogaData, setYogaData] = useState([]);
+  const [showFinalFeedbackModal, setShowFinalFeedbackModal] = useState(false);
 
   const isYoga = route?.params?.setYoga ?? false;
   
@@ -78,7 +82,10 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
     postureScore,
     alertsCount,
     handleStartStop,
-  } = usePostureMonitoring(postureData);
+    
+  } = usePostureMonitoring(postureData,yogaMode,yogaData);
+
+  
 
   const handleMessage = useCallback(async event => {
     try {
@@ -103,6 +110,17 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
           console.log('[WebView pose data]', data);
           setPostureData(() => data.posture);
           break;
+
+        case 'yoga_analysis':
+          // Process pose data with timestamp
+          console.log('[WebView pose data]', data);
+          console.log("yoga all feedback is ",data.feedback)
+          console.log("issue from yoga" , data.issue)
+          console.log("All DATA from yoga" , data)
+          // console.log("yoga feedback[0] is ",data.feedback[0])
+          // console.log("yoga feedback[feedback] is ",data.feedback[0])
+          setYogaData(()=>data)
+          break;  
 
         case 'ready':
           console.log('WebView model loaded successfully');
@@ -138,14 +156,32 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
       const path = photo.path;
       const base64 = await RNFS.readFile(path, 'base64');
 
-      const message = {
+
+      if(yogaMode===false){
+        const message = {
         command: 'predict',
         image: `data:image/jpeg;base64,${base64}`,
         from: 'sending photo',
-      };
+        };
       console.log('Sending photo to WebView');
       webviewRef.current.postMessage(JSON.stringify(message));
       console.log('Photo sent to WebView');
+      }
+
+      if(yogaMode===true){
+        const message = {
+        command: "init",
+        yogaMode: true,
+        asanaName: selectedAsana,
+        image: `data:image/jpeg;base64,${base64}`,
+        from: 'sending photo',
+        };
+      console.log('Sending photo to WebView from yoga Detection');
+      webviewRef.current.postMessage(JSON.stringify(message));
+      console.log('Photo sent to WebView for yoga Detection');
+      }
+
+      
     } catch (error) {
       console.warn('Photo error:', error);
     }
@@ -274,6 +310,8 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
         isMonitoring={isMonitoring}
         sessionTime={sessionTime}
         postureData={postureData} // ✅ pass here
+        yogaData={yogaData}
+        yogaMode={yogaMode}
         alertsCount={alertsCount}
         cameraPosition={cameraPosition}
         // onBack={() => navigation.goBack()}
@@ -285,9 +323,7 @@ const [selectedAsana, setSelectedAsana] = useState('Tadasana');
         onToggleControls={() => setShowControls(s => !s)}
         onStartStop={handleStartStop}
         selectedAsana={selectedAsana}
-onChangeAsana={() => setShowAsanaModal(true)}
-yogaMode={yogaMode}
-
+        onChangeAsana={() => setShowAsanaModal(true)}
 
       />
     </SafeAreaView>

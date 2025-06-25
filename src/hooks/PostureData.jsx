@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Alert } from "react-native";
 
-export const usePostureMonitoring = (postureData) => {
+export const usePostureMonitoring = (postureData,yogaMode,yogaData) => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [sessionTime, setSessionTime] = useState(0);
   const [postureStatus, setPostureStatus] = useState("unknown");

@@ -28,7 +28,7 @@ const YogaHomepage = ({ navigation }) => {
       >
         {/* Header Image */}
         <Image
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9791/9791045.png' }}
+          source={{ uri: 'https://images.unsplash.com/vector-1749535082626-13f28caac908?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}
           style={styles.bannerImage}
           resizeMode="contain"
         />
@@ -47,7 +47,7 @@ const YogaHomepage = ({ navigation }) => {
 
         {/* Secondary Image */}
         <Image
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/7041/7041650.png' }}
+          source={{ uri: 'https://plus.unsplash.com/premium_vector-1682298847460-30ed7b58358c?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}
           style={styles.secondaryImage}
           resizeMode="contain"
         />

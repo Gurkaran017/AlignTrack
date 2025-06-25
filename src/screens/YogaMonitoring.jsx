@@ -21,7 +21,7 @@ import WebView from 'react-native-webview';
 import RNFS from 'react-native-fs';
 import CameraOverlay from '../components/CameraDisplay';
 import LoadingScreen from '../components/Loader';
-import {usePostureMonitoring} from '../hooks/SessionAlert';
+import {usePostureMonitoring} from '../hooks/PostureData';
 import CameraView from '../components/CameraView';
 
 const PostureMonitoringScreen = ({ navigation, route }) => {

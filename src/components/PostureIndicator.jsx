@@ -12,10 +12,24 @@ const postureColors = {
 const PostureIndicator = ({
   postureScore = 100,
   postureStatus = "unknown",
-  reason = null
+  reason = null,
+  yogaFeedback ,
+  yogaMode
 }) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
-  const message = getPostureMessage(postureStatus);
+
+
+
+  console.log("yogaaaaaaaMode 11111", yogaMode)
+  console.log("yogaFeedbackkkkk",yogaFeedback)
+
+
+  const message = yogaMode === false
+  ? getPostureMessage(postureStatus)
+  : getPostureMessage(yogaFeedback?.length > 0 ? yogaFeedback : "unknown");
+
+  console.log(message)
+  
 
   useEffect(() => {
     // Simple pulse animation when posture status changes
