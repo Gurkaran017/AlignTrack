@@ -238,61 +238,106 @@
       }
 
       function generateAsanaFeedback(pose, asana) {
-    const issues = [];
+  const issues = [];
 
-    const keypoints = pose[0]?.keypoints;
-    if (!keypoints) {
-          // return {
-          //   posture: 'unknown',
-          //   confidence: 0,
-          //   reason: 'No keypoints detected',
-          //   score: 0,
-          //   details: {},
-          // };
-          return []
-        }
+  const keypoints = pose[0]?.keypoints;
+  if (!keypoints) return [];
 
-    const get = (name) => keypoints.find(p => p.name === name && p.score > 0.4);
+  const get = (name) => keypoints.find(p => p.name === name && p.score > 0.4);
 
-    const leftKnee = get("left_knee");
-    const rightKnee = get("right_knee");
-    const leftAnkle = get("left_ankle");
-    const rightAnkle = get("right_ankle");
-    const leftShoulder = get("left_shoulder");
-    const rightShoulder = get("right_shoulder");
+  const requiredParts = [
+    "left_ankle", "right_ankle", "left_knee", "right_knee",
+    "left_hip", "right_hip", "left_shoulder", "right_shoulder",
+    "left_elbow", "right_elbow", "left_wrist", "right_wrist",
+    "left_eye", "right_eye", "nose"
+  ];
+  const visibleParts = requiredParts.filter(part => get(part));
 
-    if (asana === "Tadasana") {
-      if (leftShoulder && rightShoulder && Math.abs(leftShoulder.y - rightShoulder.y) > 30) {
-        issues.push("Keep shoulders level and straight");
-      }
-      if (leftKnee && rightKnee && Math.abs(leftKnee.y - rightKnee.y) > 30) {
-        issues.push("Both legs should be straight and balanced");
-      }
-    }
-
-    if (asana === "Vrikshasana") {
-      if (!rightAnkle || !leftKnee) {
-        issues.push("Raise one foot above the knee and maintain balance");
-      }
-    }
-
-    if (asana === "Utkatasana") {
-      if (leftKnee && rightKnee && Math.abs(leftKnee.y - rightKnee.y) > 30) {
-        issues.push("Knees should be aligned equally");
-      }
-      if (leftShoulder && rightShoulder && leftShoulder.y < rightShoulder.y - 30) {
-        issues.push("Arms should be raised evenly");
-      }
-    }
-
-    if (asana === "Virabhadrasana") {
-      if (!leftKnee || !rightKnee) {
-        issues.push("Bend one leg forward properly");
-      }
-    }
-
-    return issues.length ? issues : ["Great! Maintain this position."];
+  if (visibleParts.length < requiredParts.length * 0.8) {
+    issues.push("Make sure your full body is clearly visible to the camera");
   }
+
+  const leftKnee = get("left_knee");
+  const rightKnee = get("right_knee");
+  const leftAnkle = get("left_ankle");
+  const rightAnkle = get("right_ankle");
+  const leftHip = get("left_hip");
+  const rightHip = get("right_hip");
+  const leftShoulder = get("left_shoulder");
+  const rightShoulder = get("right_shoulder");
+  const leftElbow = get("left_elbow");
+  const rightElbow = get("right_elbow");
+  const leftWrist = get("left_wrist");
+  const rightWrist = get("right_wrist");
+
+  if (asana === "Tadasana") {
+    if (leftShoulder && rightShoulder && Math.abs(leftShoulder.y - rightShoulder.y) > 30) {
+      issues.push("Keep shoulders level and straight");
+    }
+    if (leftKnee && rightKnee && Math.abs(leftKnee.y - rightKnee.y) > 30) {
+      issues.push("Both legs should be straight and balanced");
+    }
+    if (leftWrist && rightWrist && Math.abs(leftWrist.y - rightWrist.y) > 30) {
+      issues.push("Keep arms straight and aligned upward");
+    }
+    if (leftAnkle && rightAnkle && Math.abs(leftAnkle.x - rightAnkle.x) > 50) {
+      issues.push("Keep feet close together and aligned");
+    }
+    if (leftHip && rightHip && Math.abs(leftHip.y - rightHip.y) > 30) {
+      issues.push("Hips should be level and steady");
+    }
+  }
+
+  else if (asana === "Vrikshasana") {
+    if (!(leftKnee && rightAnkle) && !(rightKnee && leftAnkle)) {
+      issues.push("Raise one foot and place it on the opposite thigh");
+    }
+    if (leftWrist && rightWrist && Math.abs(leftWrist.y - rightWrist.y) > 30) {
+      issues.push("Keep arms raised and palms together");
+    }
+    if (leftHip && rightHip && Math.abs(leftHip.y - rightHip.y) > 30) {
+      issues.push("Balance your hips while standing on one leg");
+    }
+    if (leftShoulder && rightShoulder && Math.abs(leftShoulder.y - rightShoulder.y) > 30) {
+      issues.push("Keep shoulders straight while balancing");
+    }
+  }
+
+  else if (asana === "Utkatasana") {
+    if (leftKnee && rightKnee && Math.abs(leftKnee.y - rightKnee.y) > 30) {
+      issues.push("Bend both knees equally");
+    }
+    if (leftWrist && rightWrist && Math.abs(leftWrist.y - rightWrist.y) > 30) {
+      issues.push("Raise both arms evenly");
+    }
+    if (leftHip && rightHip && Math.abs(leftHip.y - rightHip.y) > 30) {
+      issues.push("Keep hips level during the squat");
+    }
+    if (leftAnkle && rightAnkle && Math.abs(leftAnkle.x - rightAnkle.x) > 80) {
+      issues.push("Feet should be hip-width apart and parallel");
+    }
+  }
+
+  else if (asana === "Virabhadrasana") {
+    if (leftKnee && rightKnee && Math.abs(leftKnee.y - rightKnee.y) < 15) {
+      issues.push("Bend one leg forward more than the other");
+    }
+    if (leftWrist && rightWrist && Math.abs(leftWrist.y - rightWrist.y) > 30) {
+      issues.push("Arms should be extended straight and even");
+    }
+    if (leftHip && rightHip && Math.abs(leftHip.y - rightHip.y) > 30) {
+      issues.push("Maintain equal hip level for balance");
+    }
+    if (leftAnkle && rightAnkle && Math.abs(leftAnkle.x - rightAnkle.x) < 100) {
+      issues.push("Widen your stance for Warrior pose");
+    }
+    if (leftShoulder && rightShoulder && Math.abs(leftShoulder.y - rightShoulder.y) > 30) {
+      issues.push("Keep shoulders aligned and arms at shoulder height");
+    }
+  }
+
+  return issues.length ? issues : ["Great! Maintain this position."];
+}
 
       async function predictPoseFromBase64(base64Image) {
         return new Promise((resolve, reject) => {
